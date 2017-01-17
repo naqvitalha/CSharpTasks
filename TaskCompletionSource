@@ -1,0 +1,43 @@
+import Task from "./Task";
+export default class TaskCompletionSource {
+    constructor() {
+        this.task = new Task();
+        this.isResultSet = false;
+    }
+
+    cancel() {
+        this.trySetError("task was cancelled");
+    }
+
+    setResult(result) {
+        if (this.isResultSet) {
+            throw "result/error has been set before";
+        }
+        else {
+            this.isResultSet = true;
+            this.task.resolve(result);
+        }
+    }
+
+    trySetResult(result) {
+        if (!this.isResultSet) {
+            this.setResult(result);
+        }
+    }
+
+    setError(error) {
+        if (this.isResultSet) {
+            throw "result/error has been set before";
+        }
+        else {
+            this.isResultSet = true;
+            this.task.reject(error);
+        }
+    }
+
+    trySetError(error) {
+        if (!this.isResultSet) {
+            this.setError(error);
+        }
+    }
+}
